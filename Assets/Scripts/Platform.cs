@@ -18,7 +18,6 @@ public class Platform : MonoBehaviour
 
 
         int Platformorderindex = 0;
-        Debug.Log(randomnumber);
 
         for(int i = 0; i < Platforms.Length; i++)
         {

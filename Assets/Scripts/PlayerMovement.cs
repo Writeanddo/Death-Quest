@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement instance;
+
     private CharacterController CharacterController;
 
 
@@ -17,15 +19,24 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float Hangtime, Hangcounter;
     [SerializeField] float JumpBufferTime, JumpBufferCount;
 
+    
+    [SerializeField] int MaxHealth, CurrentHealth;
 
+
+    private void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
+        CurrentHealth = MaxHealth;
         CharacterController = GetComponent<CharacterController>();
     }
 
     void Update()
     {
-        Move();   
+        Move();
+
     }
 
     private void Move()
@@ -83,4 +94,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+
+    public void Takedamage(int damage)
+    {
+        CurrentHealth -= damage;
+
+        if(CurrentHealth <= 0)
+        {
+            DIE.instance.StartCoroutine(DIE.instance.die());
+        }
+    }
 }
