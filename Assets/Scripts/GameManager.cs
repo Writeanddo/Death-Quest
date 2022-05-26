@@ -8,6 +8,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] Camera Camera;
     [SerializeField] float pickuprange;
+    [SerializeField] float  abacusrange;
+    [SerializeField] float safe_range;
 
     public List<GameObject> AllItems = new List<GameObject>();
 
@@ -34,6 +36,8 @@ public class GameManager : MonoBehaviour
     {
         scrollwheel();
         pickup();
+        Abacus();
+        safe();
     }
 
     private void scrollwheel()
@@ -138,8 +142,6 @@ public class GameManager : MonoBehaviour
             }
             
 
-
-
         }
     }
 
@@ -152,5 +154,61 @@ public class GameManager : MonoBehaviour
        GameObject key = Instantiate(Key_for_molehill, Position, Quaternion.identity);
 
         MetalDetector.Key = key;
+    }
+
+    void Abacus()
+    {
+        RaycastHit Hit;
+        if (Physics.Raycast(Camera.transform.position, Camera.transform.forward, out Hit, abacusrange))
+        {
+            if (Hit.transform.gameObject.tag == "Block")
+            {
+                if (Input.GetKey(KeyCode.Mouse0))
+                {
+                    GameObject block = Hit.transform.gameObject;
+
+                    Ray ray = Camera.ScreenPointToRay(Input.mousePosition);
+
+                    float clmapedxpos = Mathf.Clamp(Hit.point.x, block.GetComponent<block>().Abacus.rightcentre.position.x, block.GetComponent<block>().Abacus.leftcentre.position.x );
+
+                   // Debug.Log(Hit.point.x);
+
+
+
+                    //Debug.Log(clmapedxpos);
+                    //Debug.Log(block.GetComponent<block>().Abacus.leftcentre.position.x);
+
+                    //Debug.Log(block.GetComponent<block>().Abacus.rightcentre.position.x);
+                     
+                    block.transform.position = new Vector3(clmapedxpos, block.transform.position.y, block.transform.position.z);
+
+                }
+            }
+
+        }
+    }
+
+    void safe()
+    {
+        RaycastHit Hit;
+        if (Physics.Raycast(Camera.transform.position, Camera.transform.forward, out Hit, safe_range))
+        {
+            if (Hit.transform.gameObject.tag == "Safe")
+            {
+                if (Input.GetKeyDown(KeyCode.Mouse0))
+                {
+                    GameObject key = Hit.transform.gameObject;
+
+                    string number = key.GetComponent<safe_keys>().number;
+
+                    key.GetComponent<safe_keys>().safe.addnumber(number);
+
+
+                }
+
+
+                   
+            }
+        }
     }
 }

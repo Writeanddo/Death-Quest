@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 5734116354057417421}
   - component: {fileID: 5734116354057417420}
   - component: {fileID: -3193272029867431200}
+  - component: {fileID: 2779201334393462386}
   m_Layer: 0
   m_Name: Tombstone
   m_TagString: Untagged
@@ -58,7 +59,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5734116354057417423}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: -33.28, y: 0.79, z: 59.31}
   m_LocalScale: {x: 0.58, y: 1.5, z: 1.25}
   m_ConstrainProportionsScale: 0
@@ -66,7 +67,7 @@ Transform:
   - {fileID: 333709304}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &5734116354057417418
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -147,3 +148,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   distance: 0
+--- !u!208 &2779201334393462386
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5734116354057417423}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

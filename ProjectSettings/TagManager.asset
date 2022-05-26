@@ -7,6 +7,10 @@ TagManager:
   - Pickup
   - Enemy
   - MoleHill
+  - Car
+  - Mapicon
+  - Block
+  - Safe
   layers:
   - Default
   - TransparentFX
@@ -14,7 +18,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Map Icon
   - 
   - 
   - 
