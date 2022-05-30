@@ -30,13 +30,12 @@ public class Gun : MonoBehaviour
     {
       if(Physics.Raycast(camera.transform.position, camera.transform.forward, out Hit, range))
       {
-          GameObject bulletimpact = Instantiate(Bulletimpact, Hit.point, Quaternion.identity);
-          
+            // GameObject bulletimpact = Instantiate(Bulletimpact, Hit.point, Quaternion.identity);
+            AudioManager.instance.playsound(0);
 
         if (Hit.transform.gameObject.tag == "Enemy")
         {
             Hit.transform.gameObject.GetComponent<EnemyHealth>().TakeDamage(Damage);
-            bulletimpact.transform.SetParent(Hit.transform);
         }
 
             

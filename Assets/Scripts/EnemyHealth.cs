@@ -27,6 +27,7 @@ public class EnemyHealth : MonoBehaviour
    void DIE()
     {
         Destroy(gameObject.transform.parent.gameObject);
+        AudioManager.instance.playsound(7);
     }
 
 }

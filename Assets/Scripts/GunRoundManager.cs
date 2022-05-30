@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GunRoundManager : MonoBehaviour
 {
+    public static GunRoundManager instance;
 
     [SerializeField] GameObject spawnlocation;
 
@@ -17,9 +18,18 @@ public class GunRoundManager : MonoBehaviour
 
     [SerializeField] float timebetweenspawns1;
 
+
+    [SerializeField] Animator dooranim;
+    [SerializeField] Flyenemiesspawner flyenemiesspawner;
+
+
+    private void Awake()
+    {
+        instance = this;
+    }
     private void Start()
     {
-       StartCoroutine(spawnfirstenemies());
+     
     }
 
     private void beginning()
@@ -72,17 +82,17 @@ public class GunRoundManager : MonoBehaviour
 
             if (second_enemies.Count == 0)
             {
-                //end
-
+                dooranim.SetTrigger("open");
+                flyenemiesspawner.ROUNDfinished = true;
                 finishedspawning2 = false;
             }
         }
     }
 
 
-    private IEnumerator spawnfirstenemies()
+    public IEnumerator spawnfirstenemies()
     {
-        for(int i = 0; i < 3; i++)
+        for(int i = 0; i <5; i++)
         {
             GameObject enemy = Instantiate(enemyprefab, spawnlocation.transform.position, Quaternion.identity);
 
@@ -97,7 +107,7 @@ public class GunRoundManager : MonoBehaviour
 
     private IEnumerator spawn_second_enemies()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 10; i++)
         {
             GameObject enemy = Instantiate(enemyprefab, spawnlocation.transform.position, Quaternion.identity);
 

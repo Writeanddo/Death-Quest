@@ -21,6 +21,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject[] molehills;
     [SerializeField] MetalDetector MetalDetector;
 
+    [SerializeField] GameObject interactableobject;
+
+    [SerializeField] GameObject go;
+
+    public Transform respawnlocation;
+    public float respawntime;
+
+    public GameObject pickupobject;
+
+    public GameObject door;
+   
 
     private void Awake()
     {
@@ -37,7 +48,7 @@ public class GameManager : MonoBehaviour
         scrollwheel();
         pickup();
         Abacus();
-        safe();
+        interactable();
     }
 
     private void scrollwheel()
@@ -69,7 +80,24 @@ public class GameManager : MonoBehaviour
 
             weaponsetactive();
         }
+
+
+        if (Input.GetKey(KeyCode.Alpha1))
+        {
+            selectedweapon = 0;
+            weaponsetactive();
+
+        }
+        if (Input.GetKey(KeyCode.Alpha2))
+        {
+            selectedweapon = 1;
+            weaponsetactive();
+        }
+
+        
     }
+
+
 
     private void weaponsetactive()
     {
@@ -100,7 +128,27 @@ public class GameManager : MonoBehaviour
         {
             if (Hit.transform.gameObject.tag == "Pickup")
             {
-                Debug.Log("hit pickup");
+
+
+               
+
+                if (pickupobject != null)
+                {
+                    if(pickupobject == Hit.transform.gameObject)
+                    {
+                        pickupobject.GetComponent<itemforpickup>().CANVAS.SetActive(true);
+
+                    }
+
+                    else
+                    {
+                        pickupobject.GetComponent<itemforpickup>().CANVAS.SetActive(false);
+
+                    }
+                   
+                }
+
+                pickupobject = Hit.transform.gameObject;
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
@@ -140,9 +188,28 @@ public class GameManager : MonoBehaviour
 
                 }
             }
-            
+
+            else
+            {
+                if(pickupobject != null)
+                {
+                    pickupobject.GetComponent<itemforpickup>().CANVAS.SetActive(false);
+                }
+            }
+
+          
 
         }
+        else
+        {
+            if (pickupobject != null)
+            {
+                pickupobject.GetComponent<itemforpickup>().CANVAS.SetActive(false);
+            }
+
+        }
+
+
     }
 
     void molehillkey()
@@ -188,8 +255,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void safe()
+    void interactable()
     {
+
         RaycastHit Hit;
         if (Physics.Raycast(Camera.transform.position, Camera.transform.forward, out Hit, safe_range))
         {
@@ -203,12 +271,249 @@ public class GameManager : MonoBehaviour
 
                     key.GetComponent<safe_keys>().safe.addnumber(number);
 
+                }
+            }
 
+
+
+            if (Hit.transform.gameObject.tag == "interactable")
+            {
+                 interactableobject = Hit.transform.gameObject;
+
+                if (interactableobject.GetComponent<DOOR>() != null)
+                {
+                    if (Input.GetKey(KeyCode.E))
+                    {
+                        interactableobject.GetComponent<DOOR>().turnoffHoldEandenablestatus();
+                        interactableobject.GetComponent<DOOR>().cancount = true;
+                    }
+                    else
+                    {
+                        interactableobject.GetComponent<DOOR>().turnonHoldEanddisablestatus();
+                        interactableobject.GetComponent<DOOR>().cancount = false;
+
+                    }
                 }
 
+                if (interactableobject.GetComponent<tomb_ground_detection>() != null)
+                {
+                    if (Input.GetKey(KeyCode.E))
+                    {
+                        interactableobject.GetComponent<tomb_ground_detection>().turnoffHoldEandenablestatus();
+                        interactableobject.GetComponent<tomb_ground_detection>().cancount = true;
+                    }
+                    else
+                    {
+                        interactableobject.GetComponent<tomb_ground_detection>().turnonHoldEanddisablestatus();
+                        interactableobject.GetComponent<tomb_ground_detection>().cancount = false;
 
+                    }
+                }
+            }
+
+            else
+            {
+                if (interactableobject != null)
+                {
+                    if (interactableobject.GetComponent<DOOR>() != null)
+                    {
+                        interactableobject.GetComponent<DOOR>().turnoffHoldEanddisablestatus();
+                        interactableobject.GetComponent<DOOR>().cancount = false;
+                    }
+
+                    if(interactableobject.GetComponent<tomb_ground_detection>() != null)
+                    {
+                        interactableobject.GetComponent<tomb_ground_detection>().turnoffHoldEanddisablestatus();
+                        interactableobject.GetComponent<tomb_ground_detection>().cancount = false;
+                    }
                    
+                }
+               
+            }
+
+            if (Hit.transform.gameObject.tag == "Gear")
+            {
+               go = Hit.transform.gameObject;
+
+                if (go.GetComponent<Gearmanager>() != null)
+                {
+                    if (go.GetComponent<Gearmanager>().gearplaced == false)
+                    {
+                        if(Items[selectedweapon] != AllItems[5])
+                        {
+                            go.GetComponent<Gearmanager>().missingcanvas.SetActive(true);
+                            go.GetComponent<Gearmanager>().insertgearcanvas.SetActive(false);
+                        }
+
+                        else
+                        {
+                            go.GetComponent<Gearmanager>().missingcanvas.SetActive(false);
+                            go.GetComponent<Gearmanager>().insertgearcanvas.SetActive(true);
+                        }
+                     
+                    }
+                    else
+                    {
+
+                    }
+
+                    if (Input.GetKey(KeyCode.E))
+                    {
+                        if (Items[selectedweapon] == AllItems[5])
+                        {
+                            go.GetComponent<Gearmanager>().gearplaced = true;
+                            go.GetComponent<Gearmanager>().gearinserted();
+
+                            Items[selectedweapon].SetActive(false);
+                            Items[selectedweapon] = null;
+                            
+
+                            if(Items[0] == null && Items[1] != null)
+                            {
+                                Items[0] = Items[1];
+                                Items[1] = null;
+                            }
+
+                            weaponsetactive();
+                        }
+                    }
+                }
+            }
+
+            else
+            {
+
+                if (go != null)
+                {
+
+                        go.GetComponent<Gearmanager>().missingcanvas.SetActive(false);
+                        go.GetComponent<Gearmanager>().insertgearcanvas.SetActive(false);
+                    
+                }
+            }
+
+
+            if (Hit.transform.gameObject.tag == "enddoor")
+            {
+                door = Hit.transform.gameObject;
+
+                if (door.GetComponent<enddoor>() != null)
+                {
+                    if (door.GetComponent<enddoor>().hasunlockeddoor == false)
+                    {
+                        if (Items[selectedweapon] != AllItems[6])
+                        {
+                            door.GetComponent<enddoor>().nokeyfound.SetActive(true);
+                            door.GetComponent<enddoor>().unlockdoor.SetActive(false);
+                        }
+
+                        else
+                        {
+                            door.GetComponent<enddoor>().nokeyfound.SetActive(false);
+                            door.GetComponent<enddoor>().unlockdoor.SetActive(true);
+                        }
+
+                    }
+                    else
+                    {
+
+                    }
+                    if (Input.GetKey(KeyCode.E))
+                    {
+                        if (Items[selectedweapon] == AllItems[6])
+                        {
+                            door.GetComponent<enddoor>().hasunlockeddoor = true;
+                            door.GetComponent<enddoor>().opendoor();
+
+                            Items[selectedweapon].SetActive(false);
+                            Items[selectedweapon] = null;
+
+
+                            if (Items[0] == null && Items[1] != null)
+                            {
+                                Items[0] = Items[1];
+                                Items[1] = null;
+                            }
+
+                            weaponsetactive();
+                        }
+                    }
+                }
+            }
+
+            else
+            {
+
+                if (door != null)
+                {
+
+                    door.GetComponent<enddoor>().nokeyfound.SetActive(false);
+                    door.GetComponent<enddoor>().unlockdoor.SetActive(false);
+
+                }
+            }
+
+        }
+
+        else
+        {
+
+            if (interactableobject != null)
+            {
+                if (interactableobject.GetComponent<DOOR>() != null)
+                {
+                    interactableobject.GetComponent<DOOR>().turnoffHoldEanddisablestatus();
+                    interactableobject.GetComponent<DOOR>().cancount = false;
+                }
+
+                if (interactableobject.GetComponent<tomb_ground_detection>() != null)
+                {
+                    interactableobject.GetComponent<tomb_ground_detection>().turnoffHoldEanddisablestatus();
+                    interactableobject.GetComponent<tomb_ground_detection>().cancount = false;
+                }
+
+            }
+
+
+            if (go!=  null)
+            {
+                go.GetComponent<Gearmanager>().missingcanvas.SetActive(false);
+                go.GetComponent<Gearmanager>().insertgearcanvas.SetActive(false);
+
+            }
+
+            if (door != null)
+            {
+
+                door.GetComponent<enddoor>().nokeyfound.SetActive(false);
+                door.GetComponent<enddoor>().unlockdoor.SetActive(false);
+
             }
         }
+    }
+
+
+    public void stopdoorcount()
+    {
+        if (interactableobject != null)
+        {
+            if(interactableobject.GetComponent<DOOR>() != null)
+            {
+                interactableobject.GetComponent<DOOR>().turnoffHoldEanddisablestatus();
+                interactableobject.GetComponent<DOOR>().cancount = false;
+            }
+          
+        }
+
+    }
+
+
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(Camera.transform.position,Camera.transform.position +  Camera.transform.forward * safe_range);
+
     }
 }

@@ -7,6 +7,8 @@ public class molehill : MonoBehaviour
     [SerializeField] List<GameObject> hills = new List<GameObject>();
     [SerializeField] int index;
 
+    public GameObject canvas;
+
     void Start()
     {
         for(int i = 0; i< 3; i++)

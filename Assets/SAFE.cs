@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 public class SAFE : MonoBehaviour
 {
-    [SerializeField] string correctcode;
+    public string correctcode;
 
 
     [SerializeField] TMP_Text code;
@@ -12,20 +12,68 @@ public class SAFE : MonoBehaviour
     [SerializeField] List<string> codelist = new List<string>();
 
 
+    [SerializeField] Animator anim;
+
+
+
+
     public void addnumber(string number)
     {
-        codelist.Add(number);
+        if(number == "cancel")
+        {
+            clear();
+            AudioManager.instance.playsound(1);
+        }
 
-        rendernumber();
+        else if(number == "enter")
+        {
+            ENTER();
+            
+        }
+        else
+        {
+            codelist.Add(number);
+
+            rendernumber();
+            AudioManager.instance.playsound(1);
+        }
+
+        
+       
     }
 
     public void clear()
     {
-        //clear the whole list if we click the clear button
+        codelist.Clear();
+        code.text = "";
     }
 
     private void rendernumber()
     {
         code.text = string.Join("", codelist.ToArray());
+
+    
+    }
+
+
+    void ENTER()
+    {
+        if(code.text == correctcode)
+        {
+            Debug.Log("correct");
+            //play open safe anim;
+            //play correct sound
+
+            anim.SetTrigger("open");
+            AudioManager.instance.playsound(2);
+        }
+
+        else
+        {
+            Debug.Log("incorrect");
+            //play incrorrect sound
+            clear();
+            AudioManager.instance.playsound(3);
+        }
     }
 }

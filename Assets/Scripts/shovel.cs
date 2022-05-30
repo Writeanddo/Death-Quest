@@ -10,9 +10,12 @@ public class shovel : MonoBehaviour
 
     [SerializeField] GameObject camera;
 
+    [SerializeField] Animator anim;
     private RaycastHit Hit;
 
     [SerializeField] float range;
+
+    [SerializeField] GameObject hitobject;
 
     // Start is called before the first frame update
     void Start()
@@ -38,11 +41,17 @@ public class shovel : MonoBehaviour
            
             if (Hit.transform.gameObject.tag == "MoleHill")
             {
-                Debug.Log("detecting");
+                hitobject = Hit.transform.gameObject;
+                 
+                hitobject.GetComponent<molehill>().canvas.SetActive(true);
+
                 if (Input.GetKeyDown(KeyCode.E) && Time.time >= nexttimetofire)
                 {
-                    Hit.transform.gameObject.GetComponent<molehill>().destroyhill();
+                   
 
+
+                    anim.SetTrigger("dig");
+                    hitobject.GetComponent<molehill>().canvas.SetActive(false);
                     nexttimetofire = Time.time + Firerate_secs;
 
                 }
@@ -50,8 +59,52 @@ public class shovel : MonoBehaviour
             
                 
             }
+            else
+            {
+
+                if (hitobject != null)
+                {
+                    hitobject.GetComponent<molehill>().canvas.SetActive(false);
+                }
+            }
+
+            
 
         }
+
+        else
+        {
+            if(hitobject != null)
+            {
+                hitobject.GetComponent<molehill>().canvas.SetActive(false);
+            }
+           
+        }
+
+        if(Time.time < nexttimetofire)
+        {
+            if (hitobject != null)
+            {
+                hitobject.GetComponent<molehill>().canvas.SetActive(false);
+            }
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (hitobject != null)
+        {
+            hitobject.GetComponent<molehill>().canvas.SetActive(false);
+        }
+    }
+
+    public void digevent()
+    {
+        if(hitobject != null)
+        {
+            hitobject.GetComponent<molehill>().destroyhill();
+        }
+     
     }
 }
  

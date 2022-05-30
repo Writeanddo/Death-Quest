@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class itemforpickup : MonoBehaviour
 {
+    public GameObject CANVAS;
  public int itemindex;
 }

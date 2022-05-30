@@ -9,6 +9,8 @@ public class Abacus : MonoBehaviour
     [SerializeField] Vector3 size;
     [SerializeField] int Numleft,Numright;
 
+    public bool correct;
+
     private void Update()
     {
 
@@ -40,6 +42,7 @@ public class Abacus : MonoBehaviour
         if(sumleft == Numright && sumright == Numleft)
         {
             Debug.Log("correct");
+            correct = true;
         }
     }
 

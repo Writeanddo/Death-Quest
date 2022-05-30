@@ -20,7 +20,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float JumpBufferTime, JumpBufferCount;
 
     
-    [SerializeField] int MaxHealth, CurrentHealth;
+    public int MaxHealth, CurrentHealth;
+    [SerializeField] healthbar healthbar;
+
+    public Camera cam;
 
 
     private void Awake()
@@ -30,11 +33,15 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         CurrentHealth = MaxHealth;
+        healthbar.setMaxHealth(MaxHealth);
+        healthbar.sethealth(CurrentHealth);
+        CurrentHealth = MaxHealth;
         CharacterController = GetComponent<CharacterController>();
     }
 
     void Update()
     {
+        healthbar.sethealth(CurrentHealth);
         Move();
 
     }
@@ -98,10 +105,12 @@ public class PlayerMovement : MonoBehaviour
     public void Takedamage(int damage)
     {
         CurrentHealth -= damage;
-
-        if(CurrentHealth <= 0)
+        Uimanager.instance.abletolerp = true;
+        Uimanager.instance.Resetlerptime();
+        if (CurrentHealth <= 0)
         {
             DIE.instance.StartCoroutine(DIE.instance.die());
+           
         }
     }
 }

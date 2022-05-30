@@ -1,16 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using TMPro;
 public class Platform : MonoBehaviour
 {
+    public static Platform instance;
+
     [SerializeField] GameObject[] Platforms;
 
     [SerializeField] Platformorder[] Platformorder;
 
     [SerializeField] Material bad;
 
+    [SerializeField] List<string> correctstringorderlist = new List<string>();
+    public string correctorderstring;
 
+    [SerializeField] TMP_Text pickuptext;
+    [SerializeField] TMP_Text gameobjecttext;
+
+
+    private void Awake()
+    {
+        instance = this;
+    }
     void Start()
     {
         int randomnumber = Random.Range(0,Platformorder.Length);
@@ -30,21 +42,39 @@ public class Platform : MonoBehaviour
                 if(Randomplatformorder.getpositions()[Platformorderindex] == "left")
                 {
                     Platforms[i + 1].GetComponent<Collider>().enabled = false;
-                    Platforms[i + 1].GetComponent<Renderer>().material = bad;
                 }
 
                 //right hand side is solid
                 else
                 {
                     Platforms[i].GetComponent<Collider>().enabled = false;
-                    Platforms[i].GetComponent<Renderer>().material = bad;
                 }
 
                 Platformorderindex++;
             }
         }
 
+        for (int i = 0; i < Randomplatformorder.getpositions().Length; i++)
+        {
+            if (Randomplatformorder.getpositions()[i] == "right")
+            {
+                correctstringorderlist.Add((i + 1).ToString() + ")" + "Right\n");
+            }
+            
+            else
+            {
+                correctstringorderlist.Add((i + 1).ToString() + ")" + "Left\n");
+            }
+        }
+
+        correctorderstring = string.Join("", correctstringorderlist.ToArray());
+
+        pickuptext.text = correctorderstring;
+        gameobjecttext.text = correctorderstring;
     
     }
+
+  
+
 
 }

@@ -6,7 +6,6 @@ using UnityEngine.AI;
 public class SpiderMovement : MonoBehaviour
 {
     [SerializeField] float distancetoplayer;
-    [SerializeField] GameObject Player;
 
     private NavMeshAgent NavmeshAgent;
 
@@ -35,14 +34,14 @@ public class SpiderMovement : MonoBehaviour
 
     private void move()
     {
-        distancetoplayer = Vector3.Distance(transform.position,Player.transform.position);
+        distancetoplayer = Vector3.Distance(transform.position,PlayerMovement.instance.transform.position);
 
 
         switch (currentstate)
         {
             case AIstate.ischasing:
 
-                NavmeshAgent.SetDestination(Player.transform.position);
+                NavmeshAgent.SetDestination(PlayerMovement.instance.transform.position);
 
                 if(distancetoplayer <= Attackrange)
                 {
@@ -53,7 +52,7 @@ public class SpiderMovement : MonoBehaviour
 
 
             case AIstate.isattacking:
-                NavmeshAgent.SetDestination(Player.transform.position);
+                NavmeshAgent.SetDestination(PlayerMovement.instance.transform.position);
 
                 if(distancetoplayer > Attackrange)
                 {
